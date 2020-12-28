@@ -3,7 +3,7 @@
 # 主題一
 
 ```diff
-執行 python3 1229.py
+執行 python3 betoGIT.py
 ```
 
 # 語法：
