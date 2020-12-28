@@ -41,7 +41,11 @@ t_LARGE   = r'\>'
 t_SMALL   = r'\<'
 t_LRGEQ   = r'\>\='
 t_SMLEQ   = r'\<\='
+#無視空白
+t_ignore = " \t"
 
+#空字串
+names = {}
 
 #自定義變數
 def t_NAME(t):
@@ -58,9 +62,7 @@ def t_NUMBER(t):
     t.value = int(t.value)  
     return t
 
-#無視空白
-
-t_ignore = " \t"  
+ 
 
 #換行
 def t_newline(t):
@@ -82,8 +84,6 @@ precedence = (
 )
 
 
-#空字串
-names = {}
 
 #for迴圈
 def p_statement_for(p):
@@ -109,24 +109,24 @@ def p_statement_if(p):
                     | IF NAME NUMBER SMLEQ NUMBER THEN NUMBER ELSE NUMBER'''
                     # if   X  4      ==    4       Y     5     N      3
     if p[4] == '==':
-        p[3] = p[3] == p[5]
+        p[2] = p[3] == p[5]
     elif p[4] == '!=':
-        p[3] = p[3] != p[5]
-    elif p[2] == '>':
-        p[0] = p[3] > p[5]
-    elif p[2] == '>=':
-        p[0] = p[3] >= p[5]
-    elif p[2] == '<':
-        p[0] = p[3] < p[5]
-    elif p[2] == '<=':
-        p[0] = p[3] <= p[5]
+        p[2] = p[3] != p[5]
+    elif p[4] == '>':
+        p[2] = p[3] > p[5]
+    elif p[4] == '>=':
+        p[2] = p[3] >= p[5]
+    elif p[4] == '<':
+        p[2] = p[3] < p[5]
+    elif p[4] == '<=':
+        p[2] = p[3] <= p[5]
 
-    if p[3]==True:
-        names[p[3]] = p[6]
-        print(" True X= ",p[6])
-    else:
-        names[p[3]]=p[9]
-        print(" False X= ",p[9])
+    if p[2]==True:
+        names[p[2]] = p[2]
+        print(" True X = ",p[7])
+    elif p[2]==False:
+        names[p[2]]=p[2]
+        print(" False X = ",p[9])
     
 
 #sigma計算機
