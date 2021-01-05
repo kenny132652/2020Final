@@ -80,6 +80,8 @@ def t_error(t):
 precedence = (
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE', 'MODULO'),
+    ('left','ROOT'),
+    ('left','POWER'),
     ('right', 'UMINUS'),
 )
 
@@ -151,6 +153,7 @@ def p_statement_sig(p):
             sum+=(i/num) ** power
     names[p[2]]=sum
     print("Ars = ",sum)
+
 #標準差計算機(process standard deviation
 def p_statement_psd(p):
     '''statement      : PSD NAME NUMBER NUMBER NUMBER 
@@ -295,7 +298,7 @@ while True:
     
     
     #Three-Address Code 
-    prio_dict = {'-':1,'+':2,'*':3,'/':4,'$':5,'^':6} #優先順序
+    prio_dict = {'-':1,'+':1,'*':3,'/':3,'$':5,'^':6} #優先順序
     op_lst = []
     op_lst.append(['op','arg1','arg2','result'])
     def find_top_prio(lst):
@@ -311,48 +314,24 @@ while True:
     ip = ip_lst
     i=0
     res=0
-    while i in range(len(ip)):
-        if ip[i] in prio_dict:
-            op=ip[i]
-            if(prio_dict[op]==1)and(prio_dict[op+1]==2):
-                res+=1
-                op_lst.append([ip[-1],ip[i],' ','t'+str(res)])
-                ip[i]='t'+str(res)
-                ip.pop(i)
-                ip.pop(i+1)
-                i=0
-                top_prio,count_ops=find_top_prio(ip)
-                
-                
-            elif(prio_dict[op]==5):
-                res+=1
-                op_lst.append([ip[-1],ip[i],' ','t'+str(res)])
-                ip[i]='t'+str(res)
-                ip.pop(i-1)
-                ip.pop(i)
-                i=0
-                top_prio,count_ops=find_top_prio(ip)
-                
-                
-            elif(prio_dict[op]>=top_prio)and (ip[i+1] in prio_dict):
-                res +=1
-                op_lst.append([ip[i+1],ip[i+2],' ','t'+str(res)])
-                ip[i+1]='t'+str(res)
-                ip.pop(i+2)
-                i=0
-                top_prio,count_ops=find_top_prio(ip)
-                
-                
-            elif prio_dict[op]>=top_prio:
-                    
-                res +=1
-                op_lst.append([op,ip[i-1],ip[i+1],'t'+str(res)])
-                ip[i]='t'+str(res)
-                    
-                ip.pop(i-1)
-                ip.pop(i)
-                i=0
-                top_prio,count_ops=find_top_prio(ip)
+    while i in range(len(ip)): 
+        if ip[i] in prio_dict: 
+            op = ip[i] 
+            if (prio_dict[op]>=top_prio) and (ip[i+1] in prio_dict): 
+                res += 1 
+                op_lst.append([ip[i+1],ip[i+2],' ','t'+str(res)]) 
+                ip[i+1] = 't'+str(res) 
+                ip.pop(i+2) 
+                i = 0 
+                top_prio, count_ops = find_top_prio(ip) 
+            elif prio_dict[op]>=top_prio: 
+                res += 1 
+                op_lst.append([op,ip[i-1],ip[i+1],'t'+str(res)]) 
+                ip[i] = 't'+str(res) 
+                ip.pop(i-1) 
+                ip.pop(i) 
+                i = 0 
+                top_prio, count_ops = find_top_prio(ip) 
                 
             
                     
@@ -383,4 +362,3 @@ while True:
             plt.savefig('nx_test.png')
             plt.clf()
         i=i+1
-        
